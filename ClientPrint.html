@@ -1,0 +1,461 @@
+	<!DOCTYPE html>
+		<html lang="en">
+			<head>
+			<meta name="viewport" content="width=device-width, initial-scale=1"> 
+			<style>
+				
+				
+				.background_pic{
+					/*background: url(solar_background_pic.jpg) repeat;*/
+					border: 4px solid black;
+					background-color: #33ccff;
+				}
+				
+				#header {
+    				background-color:black;
+    				color:white;
+    				text-align:center;
+    				padding:5px;
+				}
+
+				#nav {
+    				line-height:30px;
+    				background-color:#eeeeee;
+    				height:300px;
+    				width:100px;
+    				float:left;
+    				padding:5px;
+    				position: absolute; 
+					z-index: 5;	      
+				}
+
+				
+				.background_color {
+					background-color: white;
+					
+				}
+
+				.centertext {
+					text-align: center;
+				}
+
+				.pies {
+					margin: auto;
+				    width:650px;
+				    padding:10px;
+				 }			    
+				     
+
+				div.relative {
+    				position: relative;
+    				left: 300px;
+    			}
+
+    			.absolute {
+  					position: absolute;
+ 					 top: 120px;
+  					right: 0;
+  					width: 1500px;
+  					height: 200px;
+				}
+
+				.piet {
+					margin: auto;
+				    width:400px;
+				    padding:7px;			    
+				 }
+
+				div.relative {
+    				position: relative;
+    				left: 300px;
+				}
+
+				.aside {
+				    width:350px;
+				    float:right;
+				    padding:10px; 
+				}
+				
+				.table_pad {
+					padding: 15px !important;
+				}
+				
+				.center {
+					margin: auto;
+					width: 60%;
+					border: 3px solid #73AD21;
+				padding: 10px;
+				}
+
+				.space{
+					margin-top: 30px;
+					margin-bottom: 30px;
+				}
+
+				.center{
+					display: block; 
+					margin-left: auto; 
+					margin-right: auto
+				}
+
+			</style>
+				<!-- Latest compiled and minified CSS -->
+				<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+				<!-- jQuery library -->
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+				<!-- Latest compiled JavaScript -->
+				<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+				
+				<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		    	<script type="text/javascript">
+		    		google.charts.load('current', {'packages':['corechart']});
+		      		google.charts.setOnLoadCallback(drawChart);
+		      		google.charts.setOnLoadCallback(currentDrawFromLoadGraph);
+		      		google.charts.setOnLoadCallback(solarPanelChargeGraph);
+		      		google.charts.setOnLoadCallback(temperatureTimeGraph);
+
+		      		
+		      		function drawChart() {
+
+						var data = google.visualization.arrayToDataTable([
+							['Task', 'Hours per Day'],
+							['Power Consumed',     64],
+							['Saved',      36]
+						]);
+
+						var options = {
+						title: 'Saved Power',
+						is3D: true,
+						backgroundColor: 'lightgreen'
+						};
+
+						var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+
+						chart.draw(data, options);
+		      		}
+
+
+        			function currentDrawFromLoadGraph() {
+
+        				// Example graph
+						var data = new google.visualization.DataTable();
+						data.addColumn('number', 'X');
+						data.addColumn('number', 'Current,mA');
+
+						
+						var req1 = new XMLHttpRequest();
+						req1.open("GET","server.php?operation=2", true);
+						req1.onreadystatechange = function() {
+							if(req1.readyState==4 && req1.status==200) {
+								var response = req1.responseText;
+							}
+						}
+						req1.send();
+
+						if(response){
+							var temperatures = response.match(/.{2}/g);
+							var myArray=[];
+      				
+							for(var i=1; i<temperatures.length; i++){
+								myArray.push([i,parseInt(temperatures[i])]);
+							}
+							data.addRows(myArray);
+
+						}else{
+							var response = "212324252627282930";
+							var temperatures = response.match(/.{2}/g);
+							var myArray=[];
+      				
+							for(var i=1; i<9; i++){
+								myArray.push([i,parseInt(temperatures[i])]);
+							}
+							data.addRows(myArray);
+						}
+
+						var options = {
+							hAxis: {
+							title: 'Time'
+							},
+        				vAxis: {
+							title: 'Current Draw from load'
+							}
+						};
+
+						var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+						chart.draw(data, options);
+    				}
+
+    				function solarPanelChargeGraph() {
+
+						var data = new google.visualization.DataTable();
+						data.addColumn('number', 'X');
+						data.addColumn('number', 'Power,kW');
+
+						data.addRows([
+							[0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
+							[6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
+							[12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
+							[18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
+							[24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
+							[30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
+							[36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
+							[42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
+							[48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
+							[54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
+							[60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
+							[66, 70], [67, 72], [68, 75], [69, 80]
+						]);
+
+						var options = {
+							hAxis: {
+							title: 'Time'
+							},
+							vAxis: {
+							title: 'Power From Solar Panel'
+							}
+						};
+
+						var chart = new google.visualization.LineChart(document.getElementById('chart_div2'));
+
+						chart.draw(data, options);
+    				}
+
+    				function temperatureTimeGraph() {
+				       	// Some raw data (not necessarily accurate)
+				        var data = google.visualization.arrayToDataTable([
+				         ['Time,min', 'Outside', 'Inside', 'Heat Loss'],
+				         ['1',  165,      938,    614.6],
+				         ['2',  135,      1120,    682],
+				         ['3',  157,      1167,    623],
+				         ['4',  139,      1110,    609.4],
+				         ['5',  136,      691,   569.6]
+				      ]);
+
+				     var options = {
+				      title : 'Hourly Temperature difference and heatloss',
+				      vAxis: {title: 'Degree Celcius'},
+				      hAxis: {title: 'Time,min'},
+				      seriesType: 'bars',
+				      series: {2: {type: 'line'}}
+				    };
+
+				     var chart = new google.visualization.ComboChart(document.getElementById('chart_div3'));
+						  chart.draw(data, options);
+					}
+
+
+    				function updateGauge(){
+
+    					var battery_meter = document.getElementById("battery_meter");
+
+    					battery_meter.value="80";
+    				}
+
+    				window.onload = function() {
+						  var battery_meter = document.getElementById("battery_meter");
+
+    						battery_meter.value="80";
+					};
+
+
+
+    				function getTemperature(){
+				
+						var req1 = new XMLHttpRequest();
+						req1.open("GET","server.php?operation=1", true);
+						req1.onreadystatechange = function() {
+							if(req1.readyState==4 && req1.status==200) {
+								var response = req1.responseText;
+								alert(response);
+								document.getElementById("tempDisplay").innerHTML = "Temperature now is "+response;
+							}
+						}
+						req1.send();
+					}
+
+
+					function getBatteryLevel(){
+				
+						var battery_meter = document.getElementById("battery_meter");
+
+    					battery_meter.value="80";
+
+						var req1 = new XMLHttpRequest();
+						req1.open("GET","server.php?operation=2", true);
+						req1.onreadystatechange = function() {
+							if(req1.readyState==4 && req1.status==200) {
+								var response = req1.responseText;
+								alert(response);
+								battery_meter.value= response;
+							}
+						}
+						req1.send();
+					}
+					
+					function turnOffFan(){
+				
+						var req1 = new XMLHttpRequest();
+						req1.open("GET","server.php?operation=3", true);
+						req1.onreadystatechange = function() {
+							if(req1.readyState==4 && req1.status==200) {
+								var response = req1.responseText;
+								alert(response);
+							}
+						}
+						req1.send();
+					}
+					
+					function turnOnFan(){
+				
+						var req1 = new XMLHttpRequest();
+						req1.open("GET","server.php?operation=4", true);
+						req1.onreadystatechange = function() {
+							if(req1.readyState==4 && req1.status==200) {
+								var response = req1.responseText;
+								alert(response);
+							}
+						}
+						req1.send();
+					}
+					
+					function autoSystem(){
+				
+						var req1 = new XMLHttpRequest();
+						req1.open("GET","server.php?operation=5", true);
+						req1.onreadystatechange = function() {
+							if(req1.readyState==4 && req1.status==200) {
+								var response = req1.responseText;
+								alert(response);
+							}
+						}
+						req1.send();
+					}
+					
+					function turnOffLights(){
+				
+						var req1 = new XMLHttpRequest();
+						req1.open("GET","server.php?operation=6", true);
+						req1.onreadystatechange = function() {
+							if(req1.readyState==4 && req1.status==200) {
+								var response = req1.responseText;
+								alert(response);
+							}
+						}
+						req1.send();
+					}
+					
+					function turnOnLights(){
+				
+						var req1 = new XMLHttpRequest();
+						req1.open("GET","server.php?operation=7", true);
+						req1.onreadystatechange = function() {
+							if(req1.readyState==4 && req1.status==200) {
+								var response = req1.responseText;
+								alert(response);
+							}
+						}
+						req1.send();
+					}
+
+					function checkServer(){
+				
+						var req1 = new XMLHttpRequest();
+						req1.open("GET","server.php?operation=99", true);
+						req1.onreadystatechange = function() {
+							if(req1.readyState==4 && req1.status==200) {
+								var response = req1.responseText;
+								alert(response);
+								console.log(response);
+							}
+						}
+						req1.send();
+					}
+				</script>
+
+			</head>
+			
+			
+			<div  class="container background_pic">
+			<body class="background_color">
+				
+				<div class="row">
+				<div class="col-md-12">
+				<div class="centertext">
+					<h1 id="header">Smart Home Energy System</>
+				</div>
+				</div>
+				</div>
+				
+				<div class="row">
+				<div class="col-md-2">					
+					<button type="button" class="btn btn-default btn-lg btn-block" onclick="turnOnLights()"> Turn On Lights</button>
+					<button type="button" class="btn btn-default btn-lg btn-block" onclick="turnOffLights()"> Turn Off Lights</button>
+					<button type="button" class="btn btn-default btn-lg btn-block" onclick="systemAuto()"> Auto</button>
+					<button type="button" class="btn btn-default btn-lg btn-block" onclick="turnOnFan()"> Turn On Fan</button>
+					<button type="button" class="btn btn-default btn-lg btn-block" onclick="turnOffFan()"> Turn Off Fan</button>
+					<button type="button" class="btn btn-default btn-lg btn-block" onclick="getTemperature()"> Get Temperature</button>
+					<button type="button" class="btn btn-default btn-lg btn-block" onclick="checkServer()"> Check Server</button>
+				</div>
+				
+				<div class="col-md-4">
+					
+					<table class="table table-bordered" style="background-color: #ffffff; border: 2px solid black;">
+						<tr><td class="table_pad"> Lights status: OFF</td></tr>
+						<tr><td class="table_pad"> Lights status: OFF</td></tr>
+						<tr><td class="table_pad"> Auto status: </td></tr>
+						<tr><td class="table_pad"> Fan status: OFF</td></tr>
+						<tr><td class="table_pad"> Fan status: OFF</td></tr>
+						<tr><td class="table_pad"> Temperature is: </td></tr>
+					</table>
+				</div>
+				
+				<div class="col-md-6">
+					<div id="piechart_3d" style="width: 500px; height: 310px; border: 2px solid black"></div>
+				</div>
+				</div>
+				
+				<div class="row space">
+				<div class="col-md-12">
+				<div>
+					<h4>Battery Charge Level:</h4>
+						<meter  id="battery_meter" value="50" min="0" max="100" style="width:400px; height: 20px">80% </meter> Battery Capacity<br>	
+					<button type="button" class="btn btn-default" onclick="getBatteryLevel()">Get current Level</button>					
+				</div>
+				</div>
+				</div>
+				
+				<div class="row space">
+				<div class="col-md-12">
+				<div class="drawLineGraph nav">
+					<h4>Current Usage Over Time:</h4>
+					<button type="button" class="btn btn-default" onclick="currentDrawFromLoadGraph()">Update Data</button>
+				<div id="chart_div" style="width: 950px; height: 200px; margin-top: 10px; border: 2px solid black"></div>
+				</div>
+				</div>
+				</div>
+				
+				<div class="row space">
+				<div class="col-md-12">
+				<div class="drawLineGraph2 nav">
+					<h4>Solar Panel Charge Over Time:</h4>
+					<button type="button" class="btn btn-default" onclick="solarPanelChargeGraph()">Update Data</button>
+				<div id="chart_div2" style="width: 950px; height: 200px; margin-top: 10px; border: 2px solid black"></div>
+				</div>
+				</div>
+				</div>
+				
+				<div class="row space">
+				<div class="col-md-12" >
+				<div class="drawTemperature">
+					<h4>Temperature Over Time:</h4>
+					<button type="button" class="btn btn-default" onclick="temperatureTimeGraph()">Update Data</button>
+				<div id="chart_div3" style="width: 950px; height: 200px; margin-top: 10px; border: 2px solid black"></div>
+				</div>
+				</div>
+				
+			</body>
+			</div>
+		</html>
